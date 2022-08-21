@@ -204,6 +204,53 @@ router.post("/createDataWithTransaction", async (req, res) => {
   }
 });
 
+router.post("/createWithRelational", async (req, res) => {
+  // const user = await User.create(
+  //   {
+  //     username: "Onur",
+  //   },
+  //   { logging: true }
+  // );
+  // const user = await User.findByPk(1);
+  // const socialMedia = await Socials.findByPk(1);
+  // const socialMedia2 = await Socials.findByPk(6);
+  // const remove = await user.removeSocial(socialMedia);
+  // const removes = await user.removeSocials([socialMedia, socialMedia2]);
+  // const x = await user.createSocial({ socialmedia_name: "Facebook" });
+  // console.log("x", x);
+  // const data = await user.getSocials();
+  // console.log("data", data);
+  // const count = await user.countSocials();
+  // console.log("count", count);
+  // const social = await Socials.create({
+  //   socialmedia_name: "Instagram",
+  // });
+  // const social2 = await Socials.create({
+  //   socialmedia_name: "Whatsapp",
+  // });
+  // await user.addSocials([social, social2]);
+  // const social = await Socials.create({
+  //   socialmedia_name: "Instagram",
+  // });
+  // const userWithSocial = await user.addSocial(social);
+  // console.log("userWithSocial =>", userWithSocial);
+});
+
+router.get("/getUserWithSocials", async (req, res) => {
+  const data = await User.findAll({
+    include: {
+      model: Socials,
+      attributes: ["socialmedia_name", "id"],
+      where: {
+        id: {
+          [Op.eq]: 4,
+        },
+      },
+    },
+  });
+  res.json(data);
+});
+
 app.use(express.json());
 app.use(router);
 
@@ -213,35 +260,3 @@ app.listen(3001, async () => {
   // await db.createTables();
   console.log("Done");
 });
-
-const createDataWithRelational = async () => {
-  // const user = await User.create(
-  //   {
-  //     username: "Onur",
-  //   },
-  //   { logging: true }
-  // );
-  const user = await User.findByPk(1);
-  // const x = await user.createSocial({ socialmedia_name: "Facebook" });
-  // console.log("x", x);
-  const data = await user.getSocials();
-  console.log("data", data);
-  const count = await user.countSocials();
-  console.log("count", count);
-  const social = await Socials.create({
-    socialmedia_name: "Instagram",
-  });
-  const social2 = await Socials.create({
-    socialmedia_name: "Whatsapp",
-  });
-  await user.addSocials([social, social2]);
-
-  // const social = await Socials.create({
-  //   socialmedia_name: "Instagram",
-  // });
-
-  // const userWithSocial = await user.addSocial(social);
-  // console.log("userWithSocial =>", userWithSocial);
-};
-
-createDataWithRelational();
