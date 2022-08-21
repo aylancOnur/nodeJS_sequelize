@@ -167,14 +167,35 @@ const paginationData = async () => {
 };
 
 const getQueryWithSequelize = async () => {
-  const res = await db.sequelize.query("SELECT * FROM test WHERE test_id = :testId", {
-    replacements: {
-      testId: 1
-    },
-    logging: console.log,
-    type: QueryTypes.SELECT,
-  });
+  const res = await db.sequelize.query(
+    "SELECT * FROM test WHERE test_id = :testId",
+    {
+      replacements: {
+        testId: 1,
+      },
+      logging: console.log,
+      type: QueryTypes.SELECT,
+    }
+  );
   console.log("res =>", res);
+};
+
+const createWithTransaction = async () => {
+  const t = await db.sequelize.transaction();
+  try {
+    const res = await TestModel.create(
+      {
+        testName: "username6",
+        testSurname: "usersurname6",
+      },
+      { logging: true, validate: true }
+    );
+    await t.commit();
+    console.log("res =>", res.testFullName);
+  } catch (error) {
+    await t.rollback();
+    console.log("error =>", error.errors[0].message);
+  }
 };
 
 // createData();
@@ -185,7 +206,8 @@ const getQueryWithSequelize = async () => {
 // createMultiple();
 // findOrCreate();
 // paginationData();
-getQueryWithSequelize();
+// getQueryWithSequelize();
+createWithTransaction();
 
 router.get("/", (req, res) => {
   res.send("Hello World!");
