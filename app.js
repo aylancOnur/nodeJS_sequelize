@@ -33,7 +33,7 @@ const createData = async () => {
     const res = await TestModel.create(
       {
         testName: "username6",
-        testSurname: "admin",
+        testSurname: "usersurname6",
       },
       { logging: true, validate: true }
     );

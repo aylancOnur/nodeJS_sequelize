@@ -49,7 +49,17 @@ const TestModel = db.sequelize.define(
     deletedAt: true,
     modelName: "TestModel",
     tableName: "test",
+    hooks: {
+      beforeValidate: (model) => {
+        console.log("BeforeValidate =>", model);
+      },
+    },
   }
 );
+
+TestModel.addHook("afterCreate", (m) => {
+  // git mail at şu tabloya başka bir kayıt ekle
+  console.log("after create =>", m);
+});
 
 module.exports = TestModel;
