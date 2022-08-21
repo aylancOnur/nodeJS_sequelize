@@ -15,19 +15,42 @@ const connectToDB = async () => {
 connectToDB();
 
 const createData = async () => {
-  const test = new TestModel({
-    testName: "username",
-    testSurname: "usersurname",
-  });
+  //   const test = new TestModel({
+  //     testName: "username",
+  //     testSurname: "usersurname",
+  //   });
   try {
-    const res = await test.save({ logging: true });
+    // const res = await test.save({ logging: true });
+    const res = await TestModel.create(
+      {
+        testName: "username2",
+        testSurname: "usersurname2",
+      },
+      { logging: true }
+    );
+
     console.log("response => ", res);
   } catch (error) {
     console.log("error", error);
   }
 };
 
-createData();
+const findAllData = async () => {
+  try {
+    const res = await TestModel.findAll({
+        attributes: ['id', 'testName', 'testSurname'],
+        logging: true
+    });
+    res.forEach(item => {
+        console.log(item.dataValues);
+    })
+  } catch (error) {
+    console.log("error =>", error);
+  }
+};
+
+// createData();
+findAllData();
 
 router.get("/", (req, res) => {
   res.send("Hello World!");
