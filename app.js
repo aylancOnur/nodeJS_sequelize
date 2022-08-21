@@ -16,22 +16,30 @@ const connectToDB = async () => {
 connectToDB();
 
 const createData = async () => {
-  //   const test = new TestModel({
-  //     testName: "username",
-  //     testSurname: "usersurname",
+  // const test = new TestModel({
+  //   testName: "username",
+  //   testSurname: "admin",
+  // });
+  // test
+  //   .validate()
+  //   .then((_val) => {
+  //     console.log("_val", _val);
+  //   })
+  //   .catch((err) => {
+  //     console.log("err =>", err.errors[0].message);
   //   });
+  // return;
   try {
-    // const res = await test.save({ logging: true });
     const res = await TestModel.create(
       {
         testName: "username6",
-        testSurname: "usersurname6",
+        testSurname: "admin",
       },
-      { logging: true }
+      { logging: true, validate: true }
     );
     console.log("res =>", res.testFullName);
   } catch (error) {
-    console.log("error", error);
+    console.log("error =>", error.errors[0].message);
   }
 };
 
@@ -153,8 +161,8 @@ const paginationData = async () => {
     response.rows.forEach((item) => {
       console.log("item", JSON.stringify(item.dataValues));
     });
-  } catch (error) {
-    console.log("error =>", error);
+  } catch (err) {
+    console.log("error =>", err);
   }
 };
 

@@ -33,6 +33,13 @@ const TestModel = db.sequelize.define(
     },
     testSurname: {
       type: DataTypes.CHAR({ length: 50 }),
+      validate: {
+        customValidate(value) {
+          if (value === "admin") {
+            throw new Error("Admin değeri girilemez!");
+          }
+        },
+      },
       //   defaultValue: "defaultValue",
     },
   },
