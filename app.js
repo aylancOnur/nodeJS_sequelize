@@ -1,4 +1,5 @@
 const express = require("express");
+const { Op } = require("sequelize");
 const TestModel = require("./models/test-model");
 
 const db = require("./db");
@@ -38,19 +39,36 @@ const createData = async () => {
 const findAllData = async () => {
   try {
     const res = await TestModel.findAll({
-        attributes: ['id', 'testName', 'testSurname'],
-        logging: true
+      attributes: ["id", "testName", "testSurname"],
+      logging: true,
     });
-    res.forEach(item => {
-        console.log(item.dataValues);
-    })
+    res.forEach((item) => {
+      console.log(item.dataValues);
+    });
+  } catch (error) {
+    console.log("error =>", error);
+  }
+};
+
+const filterData = async () => {
+  try {
+    const findedData = await TestModel.findAll({
+      where: {
+        // [Op.or]: [{ testName: "onur" }, { testSurname: "usersurname2" }],
+        testName: {
+          [Op.ne]: "onur",
+        },
+      },
+    });
+    console.log("finded data =>", findedData);
   } catch (error) {
     console.log("error =>", error);
   }
 };
 
 // createData();
-findAllData();
+// findAllData();
+filterData();
 
 router.get("/", (req, res) => {
   res.send("Hello World!");
