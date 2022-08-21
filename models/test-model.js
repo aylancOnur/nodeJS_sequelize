@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 const db = require("../db");
 
 const TestModel = db.sequelize.define(
-  "Test",
+  "test",
   {
     id: {
       type: DataTypes.BIGINT,
@@ -14,11 +14,11 @@ const TestModel = db.sequelize.define(
     },
     testName: {
       type: DataTypes.STRING({ length: 50 }),
-      defaultValue: "defaultValue",
+    //   defaultValue: "defaultValue",
     },
     testSurname: {
       type: DataTypes.CHAR({ length: 50 }),
-      defaultValue: "defaultValue",
+    //   defaultValue: "defaultValue",
     },
   },
   {
