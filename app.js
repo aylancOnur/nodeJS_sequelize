@@ -9,7 +9,7 @@ const router = express.Router();
 
 const connectToDB = async () => {
   await db.connect();
-  //   await db.createTables();
+  // await db.createTables();
   console.log("Done");
 };
 
@@ -24,13 +24,12 @@ const createData = async () => {
     // const res = await test.save({ logging: true });
     const res = await TestModel.create(
       {
-        testName: "username2",
-        testSurname: "usersurname2",
+        testName: "username6",
+        testSurname: "usersurname6",
       },
       { logging: true }
     );
-
-    console.log("response => ", res);
+    console.log("res =>", res.testFullName);
   } catch (error) {
     console.log("error", error);
   }
@@ -98,12 +97,24 @@ const createMultiple = async () => {
   try {
     const response = await TestModel.bulkCreate([
       {
+        testName: "username",
+        testSurname: "usersurname",
+      },
+      {
         testName: "username2",
         testSurname: "usersurname2",
       },
       {
         testName: "username3",
         testSurname: "usersurname3",
+      },
+      {
+        testName: "username4",
+        testSurname: "usersurname4",
+      },
+      {
+        testName: "username5",
+        testSurname: "usersurname5",
       },
     ]);
   } catch (error) {
@@ -147,14 +158,14 @@ const paginationData = async () => {
   }
 };
 
-// createData();
+createData();
 // findAllData();
 // filterData();
 // deleteById();
 // updateData();
 // createMultiple();
 // findOrCreate();
-paginationData();
+// paginationData();
 
 router.get("/", (req, res) => {
   res.send("Hello World!");

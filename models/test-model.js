@@ -14,11 +14,26 @@ const TestModel = db.sequelize.define(
     },
     testName: {
       type: DataTypes.STRING({ length: 50 }),
-    //   defaultValue: "defaultValue",
+      get() {
+        const val = this.getDataValue("testName");
+        console.log("getter is working!");
+        return val.toUpperCase() + "-Getter";
+      },
+      set(value) {
+        console.log("setter is working!");
+        this.setDataValue("testName", value.toUpperCase());
+      },
+      testFullName: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          return this.testName + "-" + this.testSurname;
+        },
+      },
+      //   defaultValue: "defaultValue",
     },
     testSurname: {
       type: DataTypes.CHAR({ length: 50 }),
-    //   defaultValue: "defaultValue",
+      //   defaultValue: "defaultValue",
     },
   },
   {
@@ -26,7 +41,7 @@ const TestModel = db.sequelize.define(
     updatedAt: true,
     deletedAt: true,
     modelName: "TestModel",
-    tableName: "test"
+    tableName: "test",
   }
 );
 
