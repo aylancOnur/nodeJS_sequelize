@@ -1,5 +1,5 @@
 const express = require("express");
-const { Op } = require("sequelize");
+const { Op, QueryTypes } = require("sequelize");
 const TestModel = require("./models/test-model");
 
 const db = require("./db");
@@ -166,7 +166,18 @@ const paginationData = async () => {
   }
 };
 
-createData();
+const getQueryWithSequelize = async () => {
+  const res = await db.sequelize.query("SELECT * FROM test WHERE test_id = :testId", {
+    replacements: {
+      testId: 1
+    },
+    logging: console.log,
+    type: QueryTypes.SELECT,
+  });
+  console.log("res =>", res);
+};
+
+// createData();
 // findAllData();
 // filterData();
 // deleteById();
@@ -174,6 +185,7 @@ createData();
 // createMultiple();
 // findOrCreate();
 // paginationData();
+getQueryWithSequelize();
 
 router.get("/", (req, res) => {
   res.send("Hello World!");
