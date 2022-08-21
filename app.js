@@ -195,7 +195,7 @@ router.post("/createDataWithTransaction", async (req, res) => {
     res.status(200).json(response);
   } catch (error) {
     await t.rollback();
-    console.log("error =>", error.errors[0].message);
+    // console.log("error =>", error.errors[0].message);
     res.status(500).json({ message: "Bir hata gerçekleşti!"});
   }
 });
