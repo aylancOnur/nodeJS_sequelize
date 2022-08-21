@@ -66,9 +66,27 @@ const filterData = async () => {
   }
 };
 
+const deleteById = async () => {
+  try {
+    // const findedData = await TestModel.findByPk(3);
+    const findedData = await TestModel.findOne({
+      where: { test_id: 4 },
+    });
+
+    const removedData = await findedData.destroy({
+      logging: true,
+      force: true,
+    });
+    console.log("removedData =>", removedData);
+  } catch (error) {
+    console.log("error =>", error);
+  }
+};
+
 // createData();
 // findAllData();
-filterData();
+// filterData();
+// deleteById();
 
 router.get("/", (req, res) => {
   res.send("Hello World!");
