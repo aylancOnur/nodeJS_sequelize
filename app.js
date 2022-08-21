@@ -83,10 +83,22 @@ const deleteById = async () => {
   }
 };
 
+const updateData = async () => {
+  try {
+    const isUpdate = TestModel.update(
+      { testSurname: "updated surname" },
+      { where: { test_id: 2 } }
+    );
+  } catch (error) {
+    console.log("error =>", error);
+  }
+};
+
 // createData();
 // findAllData();
 // filterData();
 // deleteById();
+// updateData();
 
 router.get("/", (req, res) => {
   res.send("Hello World!");
