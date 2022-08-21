@@ -1,14 +1,20 @@
 const { Sequelize, DataTypes } = require("sequelize");
+require('dotenv').config()
 
 const db = {};
-
-const sequelize = new Sequelize("sequelizedb", "root", "Your DB Password", {
-  host: "localhost",
-  dialect: "mysql",
-  pool: 40,
-  logging: true,
-  retry: 3,
-});
+console.log("ENVV",process.env);
+const sequelize = new Sequelize(
+  "sequelizedb",
+  "root",
+  process.env.DB_PASSWORD,
+  {
+    host: "localhost",
+    dialect: "mysql",
+    pool: 40,
+    logging: true,
+    retry: 3,
+  }
+);
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
