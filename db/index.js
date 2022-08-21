@@ -27,11 +27,11 @@ db.connect = async () => {
 };
 
 db.createTables = async () => {
-  const TestModel = require("../models/test-model");
-  const UserModel = require("../models/user-model");
-  const SocialModel = require("../models/social-model");
-  UserModel.hasMany(SocialModel);
-  SocialModel.belongsTo(UserModel);
+  // const Test = require("../models/test-model");
+  const User = require("../models/user-model");
+  const Socials = require("../models/social-model");
+  User.hasMany(Socials, { foreignKey: "user_id" });
+  Socials.belongsTo(User);
   // await TestModel.sync({ force: true });
   sequelize.sync({ force: true });
 };

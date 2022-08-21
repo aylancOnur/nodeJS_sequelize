@@ -1,6 +1,11 @@
 const express = require("express");
 const { Op, QueryTypes } = require("sequelize");
-const TestModel = require("./models/test-model");
+const Test = require("./models/test-model");
+const User = require("./models/user-model");
+const Socials = require("./models/social-model");
+
+User.hasMany(Socials, { foreignKey: "user_id" });
+
 
 const db = require("./db");
 
@@ -9,7 +14,7 @@ const router = express.Router();
 
 router.get("/getAllData", async (req, res) => {
   try {
-    const _res = await TestModel.findAll({
+    const _res = await Test.findAll({
       attributes: ["id", "testName", "testSurname"],
       logging: true,
     });
@@ -21,7 +26,7 @@ router.get("/getAllData", async (req, res) => {
 });
 
 router.post("/createData", async (req, res) => {
-  // const test = new TestModel({
+  // const test = new Test({
   //   testName: "username",
   //   testSurname: "admin",
   // });
@@ -36,7 +41,7 @@ router.post("/createData", async (req, res) => {
   // return;
   const { testName, testSurname } = req.body;
   try {
-    const _res = await TestModel.create(
+    const _res = await Test.create(
       {
         testName,
         testSurname,
@@ -53,7 +58,7 @@ router.post("/createData", async (req, res) => {
 router.post("/createMultiple", async (req, res) => {
   const { data } = req.body;
   try {
-    const response = await TestModel.bulkCreate(data);
+    const response = await Test.bulkCreate(data);
     res.status(200).json(response);
 
     console.log("removedData =>", response);
@@ -67,8 +72,8 @@ router.delete("/delete/:itemId", async (req, res) => {
   console.log(req.params);
   const { itemId } = req.params;
   try {
-    // const findedData = await TestModel.findByPk(3);
-    const findedData = await TestModel.findOne({
+    // const findedData = await Test.findByPk(3);
+    const findedData = await Test.findOne({
       where: { test_id: itemId },
     });
 
@@ -85,13 +90,13 @@ router.delete("/delete/:itemId", async (req, res) => {
 });
 
 router.post("/findOrCreate", async (req, res) => {
-  const { testModel } = req.body;
+  const { Test } = req.body;
   try {
-    const [data, isCreated] = await TestModel.findOrCreate({
+    const [data, isCreated] = await Test.findOrCreate({
       where: {
-        testName: testModel.testName,
+        testName: Test.testName,
       },
-      defaults: testModel,
+      defaults: Test,
     });
 
     if (isCreated) {
@@ -109,7 +114,7 @@ router.put("/updateData/:itemId", async (req, res) => {
   const { itemId } = req.params;
   const { testName, testSurname } = req.body;
   try {
-    const isUpdate = TestModel.update(
+    const isUpdate = Test.update(
       { testName, testSurname },
       { where: { test_id: itemId } }
     );
@@ -124,7 +129,7 @@ router.get("/getDataById/:itemId", async (req, res) => {
   const { itemId } = req.params;
 
   try {
-    const findedData = await TestModel.findByPk(itemId);
+    const findedData = await Test.findByPk(itemId);
     res.json(findedData);
   } catch (error) {
     res.status(500).json({ message: "Bir hata gerçekleşti!" });
@@ -136,7 +141,7 @@ router.get("/getDataWithPagination", async (req, res) => {
   const { limit, offset } = req.query;
   console.log("req query =>", limit, offset);
   try {
-    const response = await TestModel.findAndCountAll({
+    const response = await Test.findAndCountAll({
       limit: Number(limit),
       logging: true,
       offset: Number(offset),
@@ -165,7 +170,7 @@ router.get("/getDataByQuery/:itemId", async (req, res) => {
 
 router.get("/filterData", async (req, res) => {
   try {
-    const findedData = await TestModel.findAll({
+    const findedData = await Test.findAll({
       where: {
         // [Op.or]: [{ testName: "onur" }, { testSurname: "usersurname2" }],
         testName: {
@@ -183,7 +188,7 @@ router.post("/createDataWithTransaction", async (req, res) => {
   const { testName, testSurname } = req.body;
   const t = await db.sequelize.transaction();
   try {
-    const response = await TestModel.create(
+    const response = await Test.create(
       {
         testName,
         testSurname,
@@ -196,7 +201,7 @@ router.post("/createDataWithTransaction", async (req, res) => {
   } catch (error) {
     await t.rollback();
     // console.log("error =>", error.errors[0].message);
-    res.status(500).json({ message: "Bir hata gerçekleşti!"});
+    res.status(500).json({ message: "Bir hata gerçekleşti!" });
   }
 });
 
@@ -209,3 +214,21 @@ app.listen(3001, async () => {
   // await db.createTables();
   console.log("Done");
 });
+
+const createDataWithRelational = async () => {
+  const user = await User.create(
+    {
+      username: "Onur",
+    },
+    { logging: true }
+  );
+
+  const social = await Socials.create({
+    socialmedia_name: "Instagram",
+  });
+
+  const userWithSocial = await user.addSocial(social);
+  console.log("userWithSocial =>", userWithSocial);
+};
+
+createDataWithRelational();

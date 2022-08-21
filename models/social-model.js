@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const db = require("../db");
 
-const SocialModel = db.sequelize.define(
-  "social",
+const Socials = db.sequelize.define(
+  "Socials",
   {
     id: {
       type: DataTypes.BIGINT,
@@ -19,10 +19,10 @@ const SocialModel = db.sequelize.define(
     createdAt: true,
     updatedAt: true,
     deletedAt: true,
-    modelName: "SocialModel",
+    modelName: "Socials",
     tableName: "social",
     underscored: true,
   }
 );
 
-module.exports = SocialModel;
+module.exports = Socials;

@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const db = require("../db");
 
-const UserModel = db.sequelize.define(
-  "user",
+const User= db.sequelize.define(
+  "User",
   {
     id: {
       type: DataTypes.BIGINT,
@@ -19,10 +19,10 @@ const UserModel = db.sequelize.define(
     createdAt: true,
     updatedAt: true,
     deletedAt: true,
-    modelName: "UserModel",
+    modelName: "User",
     tableName: "user",
     underscored: true,
   }
 );
 
-module.exports = UserModel;
+module.exports = User;

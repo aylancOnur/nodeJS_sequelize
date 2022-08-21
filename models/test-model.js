@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const db = require("../db");
 
-const TestModel = db.sequelize.define(
-  "test",
+const Test = db.sequelize.define(
+  "Test",
   {
     id: {
       type: DataTypes.BIGINT,
@@ -47,7 +47,7 @@ const TestModel = db.sequelize.define(
     createdAt: true,
     updatedAt: true,
     deletedAt: true,
-    modelName: "TestModel",
+    modelName: "Test",
     tableName: "test",
     hooks: {
       beforeValidate: (model) => {
@@ -57,9 +57,9 @@ const TestModel = db.sequelize.define(
   }
 );
 
-TestModel.addHook("afterCreate", (m) => {
+Test.addHook("afterCreate", (m) => {
   // git mail at şu tabloya başka bir kayıt ekle
   console.log("after create =>", m);
 });
 
-module.exports = TestModel;
+module.exports = Test;
