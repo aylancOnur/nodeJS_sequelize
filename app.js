@@ -94,11 +94,29 @@ const updateData = async () => {
   }
 };
 
+const createMultiple = async () => {
+  try {
+    const response = await TestModel.bulkCreate([
+      {
+        testName: "username2",
+        testSurname: "usersurname2",
+      },
+      {
+        testName: "username3",
+        testSurname: "usersurname3",
+      },
+    ]);
+  } catch (error) {
+    console.log("error =>", error);
+  }
+};
+
 // createData();
 // findAllData();
 // filterData();
 // deleteById();
 // updateData();
+createMultiple();
 
 router.get("/", (req, res) => {
   res.send("Hello World!");
