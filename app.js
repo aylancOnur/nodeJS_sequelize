@@ -111,12 +111,50 @@ const createMultiple = async () => {
   }
 };
 
+const findOrCreate = async () => {
+  try {
+    const [data, isCreated] = await TestModel.findOrCreate({
+      where: {
+        testName: "Hello",
+      },
+      defaults: {
+        testName: "Hello",
+        testSurname: "World",
+      },
+    });
+    console.log("data =>", data);
+
+    if (isCreated) {
+      console.log("isCreated =>", data);
+    }
+  } catch (error) {
+    console.log("error =>", error);
+  }
+};
+
+const paginationData = async () => {
+  try {
+    const response = await TestModel.findAndCountAll({
+      limit: 2,
+      logging: true,
+      offset: 3,
+    });
+    response.rows.forEach((item) => {
+      console.log("item", JSON.stringify(item.dataValues));
+    });
+  } catch (error) {
+    console.log("error =>", error);
+  }
+};
+
 // createData();
 // findAllData();
 // filterData();
 // deleteById();
 // updateData();
-createMultiple();
+// createMultiple();
+// findOrCreate();
+paginationData();
 
 router.get("/", (req, res) => {
   res.send("Hello World!");
