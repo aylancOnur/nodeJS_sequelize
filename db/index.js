@@ -2,7 +2,6 @@ const { Sequelize, DataTypes } = require("sequelize");
 require('dotenv').config()
 
 const db = {};
-console.log("ENVV",process.env);
 const sequelize = new Sequelize(
   "sequelizedb",
   "root",

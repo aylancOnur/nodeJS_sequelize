@@ -6,7 +6,6 @@ const Socials = require("./models/social-model");
 
 User.hasMany(Socials, { foreignKey: "user_id" });
 
-
 const db = require("./db");
 
 const app = express();
@@ -216,19 +215,33 @@ app.listen(3001, async () => {
 });
 
 const createDataWithRelational = async () => {
-  const user = await User.create(
-    {
-      username: "Onur",
-    },
-    { logging: true }
-  );
-
+  // const user = await User.create(
+  //   {
+  //     username: "Onur",
+  //   },
+  //   { logging: true }
+  // );
+  const user = await User.findByPk(1);
+  // const x = await user.createSocial({ socialmedia_name: "Facebook" });
+  // console.log("x", x);
+  const data = await user.getSocials();
+  console.log("data", data);
+  const count = await user.countSocials();
+  console.log("count", count);
   const social = await Socials.create({
     socialmedia_name: "Instagram",
   });
+  const social2 = await Socials.create({
+    socialmedia_name: "Whatsapp",
+  });
+  await user.addSocials([social, social2]);
 
-  const userWithSocial = await user.addSocial(social);
-  console.log("userWithSocial =>", userWithSocial);
+  // const social = await Socials.create({
+  //   socialmedia_name: "Instagram",
+  // });
+
+  // const userWithSocial = await user.addSocial(social);
+  // console.log("userWithSocial =>", userWithSocial);
 };
 
 createDataWithRelational();
