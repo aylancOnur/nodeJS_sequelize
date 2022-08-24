@@ -10,8 +10,8 @@ const Actor = require("./models/actor-model");
 const Movie = require("./models/movie-model");
 const Actor_Movie = require("./models/actor-movie-model");
 
-Actor.belongsToMany(Movie, { through: Actor_Movie, foreignKey: "movie_id" });
-Movie.belongsToMany(Actor, { through: Actor_Movie, foreignKey: "actor_id" });
+Actor.belongsToMany(Movie, { through: Actor_Movie, foreignKey: "actor_id" });
+Movie.belongsToMany(Actor, { through: Actor_Movie, foreignKey: "movie_id" });
 
 const db = require("./db");
 
@@ -258,6 +258,31 @@ router.get("/getUserWithSocials", async (req, res) => {
   res.json(data);
 });
 
+router.post("/manyToManyRelations", async (req, res) => {
+  const { actor_name, movie_name } = req.body;
+  const actor = await Actor.create({ actor_name });
+  const movie = await Movie.create({ movie_name });
+  const result = await actor.addMovie(movie);
+  res.send(result);
+});
+
+router.post("/manyToManyCreateActorWithMovie/:dataId", async (req, res) => {
+  const { dataId } = req.params;
+  const { movie_name } = req.body;
+
+  const actor = await Actor.findByPk(dataId);
+
+  const result = await actor.createMovie({ movie_name });
+  res.status(200).json(result);
+});
+
+router.get("/manyToManyGetMovieWithActor/:dataId", async (req, res) => {
+  const { dataId } = req.params;
+  const actor = await Actor.findByPk(dataId);
+  const result = await actor.getMovies();
+  res.status(200).json(result);
+});
+
 app.use(express.json());
 app.use(router);
 
@@ -267,12 +292,3 @@ app.listen(3001, async () => {
   // await db.createTables();
   console.log("Done");
 });
-
-const test = async () => {
-  const actor = await Actor.create({ actor_name: "Johny Deep" });
-  const movie = await Movie.create({ movie_name: "Pirates of the Caribbean" });
-  const result = await actor.addMovie(movie);
-  console.log("movie result => ", result);
-};
-
-test();
