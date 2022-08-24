@@ -6,6 +6,13 @@ const Socials = require("./models/social-model");
 
 User.hasMany(Socials, { foreignKey: "user_id" });
 
+const Actor = require("./models/actor-model");
+const Movie = require("./models/movie-model");
+const Actor_Movie = require("./models/actor-movie-model");
+
+Actor.belongsToMany(Movie, { through: Actor_Movie, foreignKey: "movie_id" });
+Movie.belongsToMany(Actor, { through: Actor_Movie, foreignKey: "actor_id" });
+
 const db = require("./db");
 
 const app = express();
@@ -260,3 +267,12 @@ app.listen(3001, async () => {
   // await db.createTables();
   console.log("Done");
 });
+
+const test = async () => {
+  const actor = await Actor.create({ actor_name: "Johny Deep" });
+  const movie = await Movie.create({ movie_name: "Pirates of the Caribbean" });
+  const result = await actor.addMovie(movie);
+  console.log("movie result => ", result);
+};
+
+test();
