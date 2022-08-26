@@ -283,6 +283,18 @@ router.get("/manyToManyGetMovieWithActor/:dataId", async (req, res) => {
   res.status(200).json(result);
 });
 
+router.delete(
+  "/manyToManyRemoveRelation/:dataId/:movieId",
+  async (req, res) => {
+    const { dataId, movieId } = req.params;
+    const actor = await Actor.findByPk(dataId);
+    const movie = await Movie.findByPk(movieId);
+    const result = actor.removeMovie(movie);
+    // await actor.removeMovies([movie1,movie2,...])
+    res.status(200).json(result);
+  }
+);
+
 app.use(express.json());
 app.use(router);
 
