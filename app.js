@@ -295,6 +295,29 @@ router.delete(
   }
 );
 
+router.get("/manyToManyListDataForActor/:dataId", async (req, res) => {
+  const { dataId } = req.params;
+  const actor = await Actor.findByPk(dataId);
+
+  const data = await Actor.findAll({
+    where: {
+      id: dataId,
+    },
+    include: [
+      {
+        model: Movie,
+        // where: {
+        //   movie_name: {
+        //     [Op.eq]: ["Movie Name"]
+        //   }
+        // },
+        through: { attributes: [] },
+      },
+    ],
+  });
+  res.json(data)
+});
+
 app.use(express.json());
 app.use(router);
 
